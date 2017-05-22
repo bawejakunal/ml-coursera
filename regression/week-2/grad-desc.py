@@ -4,7 +4,7 @@ Gradient descent algorithm for multiple linear regression
 from __future__ import print_function
 import numpy as np
 import pandas
-from sklearn import datasets, linear_model
+from sklearn import linear_model
 
 # pandas data type dict
 dtype_dict = {'bathrooms':float, 'waterfront':int, 'sqft_above':int,
