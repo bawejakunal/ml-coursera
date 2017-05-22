@@ -2,6 +2,8 @@
 Gradient descent algorithm for multiple linear regression
 
 Implement the gradient descent algorithm
+
+vectorize gradient calculation
 """
 from __future__ import print_function
 import numpy as np
@@ -37,15 +39,15 @@ def predict_output(features_matrix, weights):
     predictions = np.dot(features_matrix, weights)
     return predictions
 
-def feature_derivative(errors, feature):
+def feature_derivatives(errors, features):
     """
     return derivative w.r.t to given feature for gradient descent
 
     errors: vector of (prediction - output) values
-    feature: vector of `feature` values for each training data point
+    feature: matrix of `feature` values for each training data point
     """
-    derivative = 2 * np.dot(errors, feature)
-    return derivative
+    derivatives = 2 * np.dot(errors, features)
+    return derivatives
 
 def regression_gradient_descent(features_matrix, output_array, initial_weights,
                                 step_size, tolerance):
@@ -59,17 +61,10 @@ def regression_gradient_descent(features_matrix, output_array, initial_weights,
         errors = predictions - output_array
 
         # update each weight inidividually
-        gradient_sum_squares = 0
-        for i in range(len(weights)):
-            feature = features_matrix[:, i] # feature column
-            derivative = feature_derivative(errors, feature)
-
-            # euclidean sum of gradient wrt to each feature weight
-            gradient_sum_squares += derivative ** 2
-
-            # update weights
-            weights[i] = weights[i] - (step_size * derivative)
-
+        derivatives = feature_derivatives(errors, features_matrix)
+        weights -= derivatives * step_size # update weights
+        # sum of squared gradients wrt to a feature
+        gradient_sum_squares = np.sum(derivatives**2)
         gradient = np.sqrt(gradient_sum_squares)
 
     return weights
